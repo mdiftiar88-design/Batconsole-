@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gotham Bat-Console</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <!-- Monetag Rewarded Interstitial SDK -->
+  <script src='//libtl.com/sdk.js' data-zone='11477768' data-sdk='show_11477768'></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: monospace; }
+    body {
+      background-color: #020603;
+      color: #22c55e;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      text-align: center;
+    }
+    .card {
+      background: rgba(6, 20, 11, 0.9);
+      border: 1px solid #153e22;
+      border-radius: 16px;
+      padding: 24px;
+      width: 100%;
+      max-width: 360px;
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+    }
+    .hero-img { width: 140px; height: auto; margin-bottom: 15px; }
+    .status { font-size: 14px; margin-bottom: 15px; color: #4ade80; }
+    .counter { font-size: 28px; font-weight: bold; color: #fff; margin: 15px 0; }
+    .btn {
+      background: #22c55e;
+      color: #000;
+      border: none;
+      padding: 14px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .btn-ad {
+      background: #eab308;
+      color: #000;
+    }
+    .btn.active { background: #ef4444; color: #fff; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <img src="https://pngimg.com/uploads/batman/batman_PNG111.png" class="hero-img" alt="Batman">
+    <h2>BAT-COMPUTER v4.0</h2>
+    <p class="status" id="status-text">STATUS: READY</p>
+    
+    <div class="counter"><span id="ad-count">0</span> ADS</div>
+
+    <!-- Manual Watch Button -->
+    <button class="btn btn-ad" onclick="watchAdManual()">🎬 WATCH AD (+1)</button>
+
+    <!-- Auto Ad Button -->
+    <button class="btn" id="start-btn" onclick="toggleAuto()">⚡ AUTO ADS START</button>
+  </div>
+
+  <script>
+    if (window.Telegram && window.Telegram.WebApp) {
+      window.Telegram.WebApp.ready();
+      window.Telegram.WebApp.expand();
+    }
+
+    let isRunning = false;
+    let timer = null;
+    let count = 0;
+
+    // Manual Single Ad
+    function watchAdManual() {
+      showAdLogic();
+    }
+
+    // Toggle Auto Ads
+    function toggleAuto() {
+      const btn = document.getElementById('start-btn');
+      const status = document.getElementById('status-text');
+
+      if (!isRunning) {
+        isRunning = true;
+        btn.innerText = "STOP AUTO ADS";
+        btn.classList.add('active');
+        status.innerText = "STATUS: AUTO ADS RUNNING ⚡";
+        status.style.color = "#22c55e";
+
+        // Start running immediately
+        runAutoLoop();
+      } else {
+        isRunning = false;
+        btn.innerText = "⚡ AUTO ADS START";
+        btn.classList.remove('active');
+        status.innerText = "STATUS: STOPPED";
+        status.style.color = "#ef4444";
+        clearTimeout(timer);
+      }
+    }
+
+    // Continuous Loop for Auto Ads
+    function runAutoLoop() {
+      if (!isRunning) return;
+
+      showAdLogic(() => {
+        // Next ad after 3 seconds of closing the previous one
+        if (isRunning) {
+          timer = setTimeout(runAutoLoop, 3000);
+        }
+      });
+    }
+
+    // Core Ad Logic
+    function showAdLogic(callback) {
+      if (typeof show_11477768 === 'function') {
+        show_11477768().then(() => {
+          count++;
+          document.getElementById('ad-count').innerText = count;
+          if (callback) callback();
+        }).catch((err) => {
+          console.log("Ad Error / Closed:", err);
+          if (callback) callback();
+        });
+      } else {
+        console.log("SDK not loaded yet");
+        if (callback) setTimeout(callback, 3000);
+      }
+    }
+  </script>
+</body>
+  </html>
