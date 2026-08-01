@@ -1,137 +1,401 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gotham Bat-Console</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Jawadifty Dashboard</title>
+
+  <!-- Telegram Web App SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <!-- Monetag Rewarded Interstitial SDK -->
+  <script src='//libtl.com/sdk.js' data-zone='11477768' data-sdk='show_11477768'></script>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: monospace; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
     body {
-      background-color: #020603;
-      color: #22c55e;
+      background-color: #0b0f19;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
       display: flex;
       flex-direction: column;
+      gap: 16px;
+    }
+
+    /* --- Top Balance Card --- */
+    .balance-card {
+      background: #111827;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .balance-title {
+      color: #9ca3af;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+
+    .balance-amount {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+    }
+
+    .today-earned-badge {
+      align-self: flex-start;
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #4ade80;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    /* --- Ad Player Card --- */
+    .ad-card {
+      background: #111827;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .left-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .tv-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: #1f293d;
+      display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      padding: 20px;
-      text-align: center;
+      font-size: 1.3rem;
+      color: #818cf8;
+      flex-shrink: 0;
     }
-    .card {
-      background: rgba(6, 20, 11, 0.9);
-      border: 1px solid #153e22;
-      border-radius: 16px;
-      padding: 24px;
+
+    .info-box {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .main-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .live-badge {
+      background: rgba(99, 102, 241, 0.2);
+      color: #818cf8;
+      font-size: 0.6rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .sub-title {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    /* Auto Start Button */
+    .auto-btn {
+      background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .auto-btn.running {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    .auto-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Progress Bar */
+    .progress-container {
       width: 100%;
-      max-width: 360px;
-      box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+      height: 5px;
+      background: #1f2937;
+      border-radius: 10px;
+      overflow: hidden;
     }
-    .hero-img { width: 140px; height: auto; margin-bottom: 15px; }
-    .status { font-size: 14px; margin-bottom: 15px; color: #4ade80; }
-    .counter { font-size: 28px; font-weight: bold; color: #fff; margin: 15px 0; }
-    .btn {
-      background: #22c55e;
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #3b82f6, #10b981);
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: #6b7280;
+      font-weight: 600;
+    }
+
+    /* --- Bonus Offer Button --- */
+    .bonus-btn {
+      width: 100%;
+      background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
       color: #000;
       border: none;
-      padding: 14px 24px;
-      font-size: 16px;
-      font-weight: bold;
-      border-radius: 10px;
+      border-radius: 25px;
+      padding: 16px 20px;
+      font-size: 0.95rem;
+      font-weight: 800;
       cursor: pointer;
-      width: 100%;
-      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+      transition: all 0.2s ease;
     }
-    .btn-ad {
-      background: #eab308;
-      color: #000;
+
+    .bonus-btn:active {
+      transform: scale(0.97);
     }
-    .btn.active { background: #ef4444; color: #fff; }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <img src="https://pngimg.com/uploads/batman/batman_PNG111.png" class="hero-img" alt="Batman">
-    <h2>BAT-COMPUTER v4.0</h2>
-    <p class="status" id="status-text">STATUS: READY</p>
-    
-    <div class="counter"><span id="ad-count">0</span> ADS</div>
+  <div class="container">
 
-    <!-- Manual Watch Button -->
-    <button class="btn btn-ad" onclick="watchAdManual()">🎬 WATCH AD (+1)</button>
+    <!-- 1. Balance Display Card -->
+    <div class="balance-card">
+      <div class="balance-title">
+        <i class="fa-solid fa-wallet"></i> বর্তমান ব্যালেন্স
+      </div>
+      <div class="balance-amount">
+        ৳ <span id="main-balance">0.00</span>
+      </div>
+      <div class="today-earned-badge">
+        <i class="fa-solid fa-chart-line"></i> +৳<span id="today-balance">0.00</span> আজ
+      </div>
+    </div>
 
-    <!-- Auto Ad Button -->
-    <button class="btn" id="start-btn" onclick="toggleAuto()">⚡ AUTO ADS START</button>
+    <!-- 2. Auto Ad Card -->
+    <div class="ad-card">
+      <div class="card-top">
+        <div class="left-section">
+          <div class="tv-icon-box">
+            <i class="fa-solid fa-tv"></i>
+          </div>
+          <div class="info-box">
+            <div class="title-row">
+              <span class="main-title">বিজ্ঞাপন দেখুন</span>
+              <span class="live-badge"><i class="fa-solid fa-bolt"></i> LIVE</span>
+            </div>
+            <div class="sub-title">মোট সম্পন্ন: <span id="completed-ads">0</span> টি</div>
+          </div>
+        </div>
+
+        <button class="auto-btn" id="auto-btn" onclick="toggleAutoAds()">অটো স্টার্ট</button>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-container">
+        <div class="progress-fill" id="progress-bar"></div>
+      </div>
+
+      <div class="card-footer">
+        <span>∞ আনলিমিটেড এড</span>
+        <span id="status-text">স্টপড</span>
+      </div>
+    </div>
+
+    <!-- 3. Direct Link Bonus Offer Button -->
+    <button class="bonus-btn" onclick="openDirectLink()">
+      🚀 🔥 Bonus Offer (Direct Ad)
+    </button>
+
   </div>
 
   <script>
+    const DIRECT_LINK_URL = "https://omg10.com/4/11467098";
+    const REWARD_PER_AD = 10; // প্রতি অ্যাডে ১০ টাকা
+    const AUTO_DELAY_MS = 2000; // একটা শেষ হওয়ার ২ সেকেন্ড পর আরেকটা চালু
+
+    let tg = null;
     if (window.Telegram && window.Telegram.WebApp) {
-      window.Telegram.WebApp.ready();
-      window.Telegram.WebApp.expand();
+      tg = window.Telegram.WebApp;
+      tg.ready();
+      tg.expand();
     }
+
+    // Local Storage Data Load
+    let balance = parseFloat(localStorage.getItem('user_balance')) || 0.00;
+    let todayEarned = parseFloat(localStorage.getItem('today_earned')) || 0.00;
+    let completedAds = parseInt(localStorage.getItem('completed_ads')) || 0;
 
     let isRunning = false;
-    let timer = null;
-    let count = 0;
+    let autoTimer = null;
 
-    // Manual Single Ad
-    function watchAdManual() {
-      showAdLogic();
+    updateUI();
+
+    function updateUI() {
+      document.getElementById('main-balance').innerText = balance.toFixed(2);
+      document.getElementById('today-balance').innerText = todayEarned.toFixed(2);
+      document.getElementById('completed-ads').innerText = completedAds;
+
+      // Progress bar animation cycle (every 10 ads)
+      let progress = (completedAds % 10) * 10;
+      if (completedAds > 0 && progress === 0) progress = 100;
+      document.getElementById('progress-bar').style.width = progress + '%';
+
+      // Save Data
+      localStorage.setItem('user_balance', balance);
+      localStorage.setItem('today_earned', todayEarned);
+      localStorage.setItem('completed_ads', completedAds);
     }
 
-    // Toggle Auto Ads
-    function toggleAuto() {
-      const btn = document.getElementById('start-btn');
+    function addReward() {
+      balance += REWARD_PER_AD;
+      todayEarned += REWARD_PER_AD;
+      completedAds += 1;
+      updateUI();
+    }
+
+    function toggleAutoAds() {
+      const btn = document.getElementById('auto-btn');
       const status = document.getElementById('status-text');
 
       if (!isRunning) {
         isRunning = true;
-        btn.innerText = "STOP AUTO ADS";
-        btn.classList.add('active');
-        status.innerText = "STATUS: AUTO ADS RUNNING ⚡";
-        status.style.color = "#22c55e";
+        btn.innerText = "স্টপ";
+        btn.classList.add('running');
+        status.innerText = "রানিং ⚡";
+        status.style.color = "#3b82f6";
 
-        // Start running immediately
         runAutoLoop();
       } else {
-        isRunning = false;
-        btn.innerText = "⚡ AUTO ADS START";
-        btn.classList.remove('active');
-        status.innerText = "STATUS: STOPPED";
-        status.style.color = "#ef4444";
-        clearTimeout(timer);
+        stopAutoAds();
       }
     }
 
-    // Continuous Loop for Auto Ads
+    function stopAutoAds() {
+      isRunning = false;
+      clearTimeout(autoTimer);
+      const btn = document.getElementById('auto-btn');
+      const status = document.getElementById('status-text');
+      
+      btn.innerText = "অটো স্টার্ট";
+      btn.classList.remove('running');
+      status.innerText = "স্টপড";
+      status.style.color = "#6b7280";
+    }
+
     function runAutoLoop() {
       if (!isRunning) return;
 
-      showAdLogic(() => {
-        // Next ad after 3 seconds of closing the previous one
-        if (isRunning) {
-          timer = setTimeout(runAutoLoop, 3000);
-        }
-      });
-    }
-
-    // Core Ad Logic
-    function showAdLogic(callback) {
       if (typeof show_11477768 === 'function') {
         show_11477768().then(() => {
-          count++;
-          document.getElementById('ad-count').innerText = count;
-          if (callback) callback();
+          // অ্যাড দেখা সম্পন্ন হলে টাকা যোগ হবে
+          addReward();
+
+          // ঠিক ২ সেকেন্ড পর আবার নেক্সট অ্যাড ওপেন হবে
+          if (isRunning) {
+            autoTimer = setTimeout(runAutoLoop, AUTO_DELAY_MS);
+          }
         }).catch((err) => {
           console.log("Ad Error / Closed:", err);
-          if (callback) callback();
+          // ভুল বা ক্লোজ করলেও যদি লুপ চালু রাখতে চাস, তবে ২ সেক পর ট্রাই করবে
+          if (isRunning) {
+            autoTimer = setTimeout(runAutoLoop, AUTO_DELAY_MS);
+          }
         });
       } else {
-        console.log("SDK not loaded yet");
-        if (callback) setTimeout(callback, 3000);
+        console.log("SDK is not ready yet!");
+        if (isRunning) {
+          autoTimer = setTimeout(runAutoLoop, AUTO_DELAY_MS);
+        }
+      }
+    }
+
+    function openDirectLink() {
+      if (DIRECT_LINK_URL) {
+        if (tg && tg.openLink) {
+          tg.openLink(DIRECT_LINK_URL);
+        } else {
+          window.open(DIRECT_LINK_URL, '_blank');
+        }
       }
     }
   </script>
 </body>
-</html>
+                                                              </html>
