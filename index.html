@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Batconsole Dashboard</title>
+  <title>Batconsole Dashboard Ultra</title>
 
   <!-- Telegram Web App SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -24,13 +24,42 @@
     }
 
     body {
-      background-color: #0b0f19;
+      background-color: #030712;
       color: #fff;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       padding: 16px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient Glow Background Spheres */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 10%;
+      left: 10%;
+      width: 200px;
+      height: 200px;
+      background: rgba(99, 102, 241, 0.25);
+      filter: blur(80px);
+      border-radius: 50%;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: absolute;
+      bottom: 10%;
+      right: 10%;
+      width: 220px;
+      height: 220px;
+      background: rgba(34, 197, 94, 0.2);
+      filter: blur(80px);
+      border-radius: 50%;
+      z-index: 0;
     }
 
     .container {
@@ -39,18 +68,23 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+      position: relative;
+      z-index: 1;
     }
 
-    /* --- 🔴 Red Marked Card (Balance) --- */
+    /* --- 🔴 Red Marked Card (Ultra Glassmorphism) --- */
     .balance-card {
-      background: #111827;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 20px;
-      padding: 20px;
+      background: rgba(17, 24, 39, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      padding: 22px;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.03);
+      transition: all 0.3s ease;
     }
 
     .balance-title {
@@ -58,42 +92,55 @@
       font-size: 0.85rem;
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-weight: 500;
+      gap: 8px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
     }
 
     .balance-amount {
-      font-size: 2.2rem;
-      font-weight: 800;
+      font-size: 2.5rem;
+      font-weight: 900;
       color: #ffffff;
       letter-spacing: -0.5px;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    /* Glow animation on balance update */
+    .balance-amount.pulse {
+      color: #4ade80;
+      text-shadow: 0 0 25px rgba(74, 222, 128, 0.8);
+      transform: scale(1.03);
     }
 
     .today-earned-badge {
       align-self: flex-start;
-      background: rgba(34, 197, 94, 0.12);
-      border: 1px solid rgba(34, 197, 94, 0.3);
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(16, 185, 129, 0.05));
+      border: 1px solid rgba(34, 197, 94, 0.4);
       color: #4ade80;
       font-size: 0.75rem;
-      padding: 4px 10px;
+      padding: 5px 12px;
       border-radius: 20px;
-      font-weight: 700;
+      font-weight: 800;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
       margin-top: 4px;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.15);
     }
 
     /* --- 🟡 Yellow Marked Section (Ads Count) --- */
     .ad-card {
-      background: #111827;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 20px;
-      padding: 18px;
+      background: rgba(17, 24, 39, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      gap: 16px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
     }
 
     .card-top {
@@ -106,21 +153,23 @@
     .left-section {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       flex: 1;
     }
 
     .tv-icon-box {
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
-      background: #1f293d;
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(59, 130, 246, 0.15));
+      border: 1px solid rgba(99, 102, 241, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       color: #818cf8;
       flex-shrink: 0;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
     }
 
     .info-box {
@@ -136,46 +185,55 @@
     }
 
     .main-title {
-      font-size: 1rem;
-      font-weight: 700;
+      font-size: 1.05rem;
+      font-weight: 800;
       color: #ffffff;
     }
 
     .live-badge {
-      background: rgba(99, 102, 241, 0.2);
-      color: #818cf8;
+      background: rgba(99, 102, 241, 0.25);
+      border: 1px solid rgba(129, 140, 248, 0.4);
+      color: #a5b4fc;
       font-size: 0.6rem;
       font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 4px;
+      padding: 2px 7px;
+      border-radius: 6px;
       display: flex;
       align-items: center;
-      gap: 3px;
+      gap: 4px;
+      animation: pulseGlow 2s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { opacity: 0.7; }
+      100% { opacity: 1; box-shadow: 0 0 8px rgba(129, 140, 248, 0.6); }
     }
 
     .sub-title {
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       color: #9ca3af;
+      font-weight: 500;
     }
 
     /* Auto Start Button */
     .auto-btn {
-      background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+      background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
       color: #ffffff;
       border: none;
-      padding: 10px 20px;
-      border-radius: 25px;
-      font-size: 0.85rem;
-      font-weight: 700;
+      padding: 12px 22px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 800;
       cursor: pointer;
       flex-shrink: 0;
-      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
       transition: all 0.2s ease;
+      letter-spacing: 0.3px;
     }
 
     .auto-btn.running {
       background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
     }
 
     .auto-btn:active {
@@ -185,8 +243,8 @@
     /* Progress Bar */
     .progress-container {
       width: 100%;
-      height: 5px;
-      background: #1f2937;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
       border-radius: 10px;
       overflow: hidden;
     }
@@ -194,37 +252,50 @@
     .progress-fill {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #3b82f6, #10b981);
+      background: linear-gradient(90deg, #6366f1, #3b82f6, #10b981);
+      background-size: 200% 100%;
+      animation: gradientMove 2s linear infinite;
       border-radius: 10px;
-      transition: width 0.3s ease;
+      transition: width 0.4s ease;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
     }
 
     .card-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       color: #6b7280;
-      font-weight: 600;
+      font-weight: 700;
     }
 
-    /* Bonus Offer Button */
+    /* Bonus Offer Button (Glowing Effect) */
     .bonus-btn {
       width: 100%;
       background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
       color: #000;
       border: none;
-      border-radius: 25px;
-      padding: 16px 20px;
-      font-size: 0.95rem;
-      font-weight: 800;
+      border-radius: 30px;
+      padding: 18px 20px;
+      font-size: 1rem;
+      font-weight: 900;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+      gap: 10px;
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.4);
       transition: all 0.2s ease;
+      animation: floatGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatGlow {
+      0% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); }
+      100% { box-shadow: 0 0 30px rgba(245, 158, 11, 0.7); }
     }
 
     .bonus-btn:active {
@@ -241,7 +312,7 @@
       <div class="balance-title">
         <i class="fa-solid fa-wallet"></i> বর্তমান ব্যালেন্স
       </div>
-      <div class="balance-amount">
+      <div class="balance-amount" id="balance-box">
         ৳ <span id="main-balance">0.00</span>
       </div>
       <div class="today-earned-badge">
@@ -261,8 +332,7 @@
               <span class="main-title">বিজ্ঞাপন দেখুন</span>
               <span class="live-badge"><i class="fa-solid fa-bolt"></i> LIVE</span>
             </div>
-            <!-- Yellow Marked Ads Count Text -->
-            <div class="sub-title">মোট সম্পন্ন: <span id="completed-ads">0</span> টি</div>
+            <div class="sub-title">মোট সম্পন্ন: <span id="completed-ads" style="color: #fff; font-weight: 800;">0</span> টি</div>
           </div>
         </div>
 
@@ -275,7 +345,7 @@
       </div>
 
       <div class="card-footer">
-        <span>∞ আনলিমিটেড এড</span>
+        <span style="color: #9ca3af;">∞ আনলিমিটেড এড</span>
         <span id="status-text">স্টপড</span>
       </div>
     </div>
@@ -289,8 +359,8 @@
 
   <script>
     const DIRECT_LINK_URL = "https://omg10.com/4/11467098";
-    const REWARD_PER_AD = 10; // প্রতি অ্যাডে ১০ টাকা
-    const AUTO_DELAY_MS = 2000; // ২ সেকেন্ড পর পর অ্যাড
+    const REWARD_PER_AD = 10;
+    const AUTO_DELAY_MS = 2000;
 
     let tg = null;
     if (window.Telegram && window.Telegram.WebApp) {
@@ -299,7 +369,22 @@
       tg.expand();
     }
 
-    // Local Storage Data
+    // Play Soft Beep FX Sound
+    function playBeepSound() {
+      try {
+        let ctx = new (window.AudioContext || window.webkitAudioContext)();
+        let osc = ctx.createOscillator();
+        let gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(600, ctx.currentTime);
+        gain.gain.setValueAtTime(0.03, ctx.currentTime);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.1);
+      } catch(e) {}
+    }
+
     let balance = parseFloat(localStorage.getItem('user_balance')) || 0;
     let todayEarned = parseFloat(localStorage.getItem('today_earned')) || 0;
     let completedAds = parseInt(localStorage.getItem('completed_ads')) || 0;
@@ -310,33 +395,34 @@
     updateUI();
 
     function updateUI() {
-      // Update Red Marked Section
       document.getElementById('main-balance').innerText = balance.toFixed(2);
       document.getElementById('today-balance').innerText = todayEarned.toFixed(2);
-
-      // Update Yellow Marked Section
       document.getElementById('completed-ads').innerText = completedAds;
 
-      // Progress bar animation
       let progress = (completedAds % 10) * 10;
       if (completedAds > 0 && progress === 0) progress = 100;
       document.getElementById('progress-bar').style.width = progress + '%';
 
-      // Save Data
       localStorage.setItem('user_balance', balance);
       localStorage.setItem('today_earned', todayEarned);
       localStorage.setItem('completed_ads', completedAds);
     }
 
-    // 🔴 + 🟡 Rewards Add Logic
     function addReward() {
-      balance += REWARD_PER_AD;      // ব্যালেন্সে ১০ টাকা যোগ
-      todayEarned += REWARD_PER_AD;  // আজ-এর জায়গায় ১০ টাকা যোগ
-      completedAds += 1;             // মোট সম্পন্ন +১ টি
+      balance += REWARD_PER_AD;
+      todayEarned += REWARD_PER_AD;
+      completedAds += 1;
+      
+      // Pulse Animation on Balance
+      let balanceBox = document.getElementById('balance-box');
+      balanceBox.classList.add('pulse');
+      setTimeout(() => balanceBox.classList.remove('pulse'), 400);
+
       updateUI();
     }
 
     function toggleAutoAds() {
+      playBeepSound();
       const btn = document.getElementById('auto-btn');
       const status = document.getElementById('status-text');
 
@@ -370,16 +456,14 @@
 
       if (typeof show_11477768 === 'function') {
         show_11477768().then(() => {
-          addReward(); // Success এ রিওয়ার্ড যোগ
+          addReward();
           scheduleNextAd();
         }).catch((err) => {
-          console.log("Ad Closed / Error:", err);
-          addReward(); // Error/Closed হলেও রিওয়ার্ড যোগ
+          console.log("Ad Error / Closed:", err);
+          addReward();
           scheduleNextAd();
         });
       } else {
-        // SDK না থাকলে ৩ সেকেন্ড পর ট্রাই করবে
-        console.log("SDK is loading...");
         scheduleNextAd(3000);
       }
     }
@@ -391,6 +475,7 @@
     }
 
     function openDirectLink() {
+      playBeepSound();
       if (DIRECT_LINK_URL) {
         if (tg && tg.openLink) {
           tg.openLink(DIRECT_LINK_URL);
@@ -401,4 +486,4 @@
     }
   </script>
 </body>
-  </html>
+</html>
