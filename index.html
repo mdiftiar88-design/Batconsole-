@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gotham Bat-Console</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <!-- Monetag Rewarded Interstitial SDK -->
-  <script src='//libtl.com/sdk.js' data-zone='11477768' data-sdk='show_11477768'></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: monospace; }
     body {
@@ -111,7 +109,7 @@
       if (!isRunning) return;
 
       showAdLogic(() => {
-        // Next ad after 1 seconds of closing the previous one
+        // Next ad after 3 seconds of closing the previous one
         if (isRunning) {
           timer = setTimeout(runAutoLoop, 3000);
         }
