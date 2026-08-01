@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Jawadifty Dashboard</title>
+  <title>Batconsole Dashboard</title>
 
   <!-- Telegram Web App SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -41,7 +41,7 @@
       gap: 16px;
     }
 
-    /* --- Top Balance Card --- */
+    /* --- 🔴 Red Marked Card (Balance) --- */
     .balance-card {
       background: #111827;
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -84,7 +84,7 @@
       margin-top: 4px;
     }
 
-    /* --- Ad Player Card --- */
+    /* --- 🟡 Yellow Marked Section (Ads Count) --- */
     .ad-card {
       background: #111827;
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -208,7 +208,7 @@
       font-weight: 600;
     }
 
-    /* --- Bonus Offer Button --- */
+    /* Bonus Offer Button */
     .bonus-btn {
       width: 100%;
       background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
@@ -236,7 +236,7 @@
 
   <div class="container">
 
-    <!-- 1. Balance Display Card -->
+    <!-- 🔴 1. Balance Card -->
     <div class="balance-card">
       <div class="balance-title">
         <i class="fa-solid fa-wallet"></i> বর্তমান ব্যালেন্স
@@ -249,7 +249,7 @@
       </div>
     </div>
 
-    <!-- 2. Auto Ad Card -->
+    <!-- 🟡 2. Ad Player Card -->
     <div class="ad-card">
       <div class="card-top">
         <div class="left-section">
@@ -261,6 +261,7 @@
               <span class="main-title">বিজ্ঞাপন দেখুন</span>
               <span class="live-badge"><i class="fa-solid fa-bolt"></i> LIVE</span>
             </div>
+            <!-- Yellow Marked Ads Count Text -->
             <div class="sub-title">মোট সম্পন্ন: <span id="completed-ads">0</span> টি</div>
           </div>
         </div>
@@ -279,7 +280,7 @@
       </div>
     </div>
 
-    <!-- 3. Direct Link Bonus Offer Button -->
+    <!-- 3. Direct Link Button -->
     <button class="bonus-btn" onclick="openDirectLink()">
       🚀 🔥 Bonus Offer (Direct Ad)
     </button>
@@ -289,7 +290,7 @@
   <script>
     const DIRECT_LINK_URL = "https://omg10.com/4/11467098";
     const REWARD_PER_AD = 10; // প্রতি অ্যাডে ১০ টাকা
-    const AUTO_DELAY_MS = 2000; // একটা শেষ হওয়ার ২ সেকেন্ড পর আরেকটা চালু
+    const AUTO_DELAY_MS = 2000; // ২ সেকেন্ড পর পর অ্যাড
 
     let tg = null;
     if (window.Telegram && window.Telegram.WebApp) {
@@ -298,9 +299,9 @@
       tg.expand();
     }
 
-    // Local Storage Data Load
-    let balance = parseFloat(localStorage.getItem('user_balance')) || 0.00;
-    let todayEarned = parseFloat(localStorage.getItem('today_earned')) || 0.00;
+    // Local Storage Data
+    let balance = parseFloat(localStorage.getItem('user_balance')) || 0;
+    let todayEarned = parseFloat(localStorage.getItem('today_earned')) || 0;
     let completedAds = parseInt(localStorage.getItem('completed_ads')) || 0;
 
     let isRunning = false;
@@ -309,11 +310,14 @@
     updateUI();
 
     function updateUI() {
+      // Update Red Marked Section
       document.getElementById('main-balance').innerText = balance.toFixed(2);
       document.getElementById('today-balance').innerText = todayEarned.toFixed(2);
+
+      // Update Yellow Marked Section
       document.getElementById('completed-ads').innerText = completedAds;
 
-      // Progress bar animation cycle (every 10 ads)
+      // Progress bar animation
       let progress = (completedAds % 10) * 10;
       if (completedAds > 0 && progress === 0) progress = 100;
       document.getElementById('progress-bar').style.width = progress + '%';
@@ -324,10 +328,11 @@
       localStorage.setItem('completed_ads', completedAds);
     }
 
+    // 🔴 + 🟡 Rewards Add Logic
     function addReward() {
-      balance += REWARD_PER_AD;
-      todayEarned += REWARD_PER_AD;
-      completedAds += 1;
+      balance += REWARD_PER_AD;      // ব্যালেন্সে ১০ টাকা যোগ
+      todayEarned += REWARD_PER_AD;  // আজ-এর জায়গায় ১০ টাকা যোগ
+      completedAds += 1;             // মোট সম্পন্ন +১ টি
       updateUI();
     }
 
@@ -365,25 +370,23 @@
 
       if (typeof show_11477768 === 'function') {
         show_11477768().then(() => {
-          // অ্যাড দেখা সম্পন্ন হলে টাকা যোগ হবে
-          addReward();
-
-          // ঠিক ২ সেকেন্ড পর আবার নেক্সট অ্যাড ওপেন হবে
-          if (isRunning) {
-            autoTimer = setTimeout(runAutoLoop, AUTO_DELAY_MS);
-          }
+          addReward(); // Success এ রিওয়ার্ড যোগ
+          scheduleNextAd();
         }).catch((err) => {
-          console.log("Ad Error / Closed:", err);
-          // ভুল বা ক্লোজ করলেও যদি লুপ চালু রাখতে চাস, তবে ২ সেক পর ট্রাই করবে
-          if (isRunning) {
-            autoTimer = setTimeout(runAutoLoop, AUTO_DELAY_MS);
-          }
+          console.log("Ad Closed / Error:", err);
+          addReward(); // Error/Closed হলেও রিওয়ার্ড যোগ
+          scheduleNextAd();
         });
       } else {
-        console.log("SDK is not ready yet!");
-        if (isRunning) {
-          autoTimer = setTimeout(runAutoLoop, AUTO_DELAY_MS);
-        }
+        // SDK না থাকলে ৩ সেকেন্ড পর ট্রাই করবে
+        console.log("SDK is loading...");
+        scheduleNextAd(3000);
+      }
+    }
+
+    function scheduleNextAd(customDelay) {
+      if (isRunning) {
+        autoTimer = setTimeout(runAutoLoop, customDelay || AUTO_DELAY_MS);
       }
     }
 
@@ -398,4 +401,4 @@
     }
   </script>
 </body>
-                                                              </html>
+  </html>
