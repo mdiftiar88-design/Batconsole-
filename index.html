@@ -2,16 +2,18 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Batconsole Dashboard Ultra</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  
+  <title>MARVEL U.C.M. S.H.I.E.L.D. Terminal</title>
 
-  <!-- Telegram Web App SDK -->
+  <!-- Telegram SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-  <!-- Monetag Rewarded Interstitial SDK -->
+  <!-- Monetag SDK -->
   <script src='//libtl.com/sdk.js' data-zone='11477768' data-sdk='show_11477768'></script>
 
-  <!-- Font Awesome Icons -->
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron:wght@700;900&family=Hind+Siliguri:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
   <style>
@@ -19,45 +21,32 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: 'Hind Siliguri', sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background-color: #030712;
+      background: #030305;
       color: #fff;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      padding: 16px;
+      padding: 14px;
       overflow-x: hidden;
       position: relative;
     }
 
-    /* Ambient Glow Background Spheres */
+    /* Arc Reactor Ambient Background */
     body::before {
       content: '';
       position: absolute;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(225, 29, 72, 0.25) 0%, rgba(0,0,0,0) 70%);
       top: 10%;
-      left: 10%;
-      width: 200px;
-      height: 200px;
-      background: rgba(99, 102, 241, 0.25);
-      filter: blur(80px);
-      border-radius: 50%;
-      z-index: 0;
-    }
-
-    body::after {
-      content: '';
-      position: absolute;
-      bottom: 10%;
-      right: 10%;
-      width: 220px;
-      height: 220px;
-      background: rgba(34, 197, 94, 0.2);
-      filter: blur(80px);
+      left: 50%;
+      transform: translateX(-50%);
       border-radius: 50%;
       z-index: 0;
     }
@@ -67,292 +56,470 @@
       max-width: 400px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
       position: relative;
       z-index: 1;
     }
 
-    /* --- 🔴 Red Marked Card (Ultra Glassmorphism) --- */
+    /* Comic Pop-up Text */
+    .comic-pop {
+      position: absolute;
+      top: 35%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      font-family: 'Bangers', cursive;
+      font-size: 3.2rem;
+      color: #facc15;
+      text-shadow: 4px 4px 0 #e11d48, -3px -3px 0 #000;
+      pointer-events: none;
+      z-index: 100;
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      opacity: 0;
+    }
+
+    .comic-pop.active {
+      transform: translate(-50%, -50%) scale(1.3) rotate(-8deg);
+      opacity: 1;
+    }
+
+    /* --- S.H.I.E.L.D. Secure Terminal Header / Profile Box --- */
+    .profile-card {
+      background: rgba(18, 18, 28, 0.9);
+      border: 2px solid #e11d48;
+      border-radius: 20px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 0 20px rgba(225, 29, 72, 0.3);
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar-box {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid #facc15;
+      overflow: hidden;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
+    }
+
+    .avatar-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .user-details h3 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .hero-level-tag {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.72rem;
+      color: #facc15;
+      font-weight: 900;
+      background: rgba(250, 204, 21, 0.1);
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(250, 204, 21, 0.3);
+      display: inline-block;
+      margin-top: 2px;
+    }
+
+    .terminal-status {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 4px 8px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    /* --- JARVIS HUD Balance Card --- */
     .balance-card {
-      background: rgba(17, 24, 39, 0.75);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(18, 18, 28, 0.9);
       border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 24px;
-      padding: 22px;
+      border-radius: 20px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.03);
-      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(225, 29, 72, 0.05);
     }
 
     .balance-title {
       color: #9ca3af;
-      font-size: 0.85rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-
-    .balance-amount {
-      font-size: 2.5rem;
-      font-weight: 900;
-      color: #ffffff;
-      letter-spacing: -0.5px;
-      text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-      transition: all 0.3s ease;
-    }
-
-    /* Glow animation on balance update */
-    .balance-amount.pulse {
-      color: #4ade80;
-      text-shadow: 0 0 25px rgba(74, 222, 128, 0.8);
-      transform: scale(1.03);
-    }
-
-    .today-earned-badge {
-      align-self: flex-start;
-      background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(16, 185, 129, 0.05));
-      border: 1px solid rgba(34, 197, 94, 0.4);
-      color: #4ade80;
-      font-size: 0.75rem;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-weight: 800;
+      font-size: 0.8rem;
       display: flex;
       align-items: center;
       gap: 6px;
-      margin-top: 4px;
-      box-shadow: 0 0 10px rgba(34, 197, 94, 0.15);
+      font-weight: 700;
     }
 
-    /* --- 🟡 Yellow Marked Section (Ads Count) --- */
-    .ad-card {
-      background: rgba(17, 24, 39, 0.75);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 24px;
-      padding: 20px;
+    .balance-amount {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.3rem;
+      font-weight: 900;
+      color: #facc15;
+      text-shadow: 0 0 15px rgba(250, 204, 21, 0.4);
+    }
+
+    .today-badge {
+      align-self: flex-start;
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid #22c55e;
+      color: #4ade80;
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* --- Infinity Stones Collector Grid --- */
+    .stones-card {
+      background: rgba(18, 18, 28, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 15px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+      gap: 10px;
+    }
+
+    .stones-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #a855f7;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .stones-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+    }
+
+    .stone-icon {
+      aspect-ratio: 1;
+      border-radius: 10px;
+      background: #111;
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      opacity: 0.3;
+      transition: all 0.3s ease;
+    }
+
+    .stone-icon.active {
+      opacity: 1;
+      border-style: solid;
+      box-shadow: 0 0 12px currentColor;
+      transform: scale(1.05);
+    }
+
+    /* --- Mission Ad Card --- */
+    .ad-card {
+      background: rgba(18, 18, 28, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
     .card-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
     }
 
     .left-section {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       flex: 1;
     }
 
-    .tv-icon-box {
-      width: 52px;
-      height: 52px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(59, 130, 246, 0.15));
-      border: 1px solid rgba(99, 102, 241, 0.3);
+    .reactor-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #38bdf8 0%, #0369a1 100%);
+      border: 2px solid #38bdf8;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
-      color: #818cf8;
-      flex-shrink: 0;
-      box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+      font-size: 1.3rem;
+      color: #fff;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+      animation: reactorGlow 2s infinite alternate;
+    }
+
+    @keyframes reactorGlow {
+      0% { box-shadow: 0 0 8px rgba(56, 189, 248, 0.4); }
+      100% { box-shadow: 0 0 20px rgba(56, 189, 248, 0.9); }
     }
 
     .info-box {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-    }
-
-    .title-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      gap: 2px;
     }
 
     .main-title {
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 800;
       color: #ffffff;
-    }
-
-    .live-badge {
-      background: rgba(99, 102, 241, 0.25);
-      border: 1px solid rgba(129, 140, 248, 0.4);
-      color: #a5b4fc;
-      font-size: 0.6rem;
-      font-weight: 800;
-      padding: 2px 7px;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      animation: pulseGlow 2s infinite alternate;
-    }
-
-    @keyframes pulseGlow {
-      0% { opacity: 0.7; }
-      100% { opacity: 1; box-shadow: 0 0 8px rgba(129, 140, 248, 0.6); }
     }
 
     .sub-title {
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       color: #9ca3af;
-      font-weight: 500;
     }
 
-    /* Auto Start Button */
     .auto-btn {
-      background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+      background: linear-gradient(135deg, #e11d48 0%, #9f1239 100%);
       color: #ffffff;
-      border: none;
-      padding: 12px 22px;
-      border-radius: 30px;
-      font-size: 0.9rem;
-      font-weight: 800;
+      border: 1px solid #fecdd3;
+      padding: 11px 18px;
+      border-radius: 25px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 900;
       cursor: pointer;
-      flex-shrink: 0;
-      box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
-      transition: all 0.2s ease;
-      letter-spacing: 0.3px;
+      box-shadow: 0 0 12px rgba(225, 29, 72, 0.5);
     }
 
     .auto-btn.running {
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-      box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+      border-color: #38bdf8;
     }
 
-    .auto-btn:active {
-      transform: scale(0.95);
-    }
-
-    /* Progress Bar */
     .progress-container {
       width: 100%;
       height: 6px;
-      background: rgba(255, 255, 255, 0.08);
+      background: #111;
       border-radius: 10px;
       overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.05);
     }
 
     .progress-fill {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #6366f1, #3b82f6, #10b981);
-      background-size: 200% 100%;
-      animation: gradientMove 2s linear infinite;
+      background: linear-gradient(90deg, #e11d48, #facc15, #22c55e, #38bdf8);
       border-radius: 10px;
-      transition: width 0.4s ease;
-    }
-
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 100% 50%; }
+      transition: width 0.3s ease;
     }
 
     .card-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       color: #6b7280;
-      font-weight: 700;
+      font-weight: 600;
     }
 
-    /* Bonus Offer Button (Glowing Effect) */
+    /* Thanos Bonus Button */
     .bonus-btn {
       width: 100%;
-      background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+      background: linear-gradient(90deg, #facc15 0%, #ca8a04 100%);
       color: #000;
-      border: none;
-      border-radius: 30px;
-      padding: 18px 20px;
-      font-size: 1rem;
+      border: 2px solid #fef08a;
+      border-radius: 25px;
+      padding: 15px 20px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
       font-weight: 900;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      box-shadow: 0 0 25px rgba(245, 158, 11, 0.4);
-      transition: all 0.2s ease;
-      animation: floatGlow 3s ease-in-out infinite alternate;
-    }
-
-    @keyframes floatGlow {
-      0% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); }
-      100% { box-shadow: 0 0 30px rgba(245, 158, 11, 0.7); }
+      gap: 8px;
+      box-shadow: 0 0 20px rgba(250, 204, 21, 0.4);
     }
 
     .bonus-btn:active {
       transform: scale(0.97);
     }
+
+    /* Avatar Modal Selector */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: #12121c;
+      border: 2px solid #facc15;
+      padding: 20px;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      text-align: center;
+    }
+    .avatar-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .opt-avatar {
+      background: #1a1a2e;
+      border: 2px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 10px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .opt-avatar img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+    .opt-avatar span { font-size: 0.75rem; font-weight: bold; }
   </style>
 </head>
 <body>
 
+  <!-- Comic Pop-up Text -->
+  <div class="comic-pop" id="comic-pop">BAM! +৳10</div>
+
+  <!-- Hero Avatar Selection Modal -->
+  <div class="modal" id="avatar-modal">
+    <div class="modal-content">
+      <h3 style="color: #facc15; font-family: 'Orbitron'; font-size: 1rem;">SELECT HERO AVATAR</h3>
+      <div class="avatar-options">
+        <div class="opt-avatar" onclick="setHeroAvatar('Spider-Man', 'https://i.imgur.com/835cd6s.png')">
+          <img src="https://i.imgur.com/835cd6s.png" alt="Spider-Man" onerror="this.src='https://via.placeholder.com/50/e11d48/fff?text=SM'">
+          <span>Spider-Man</span>
+        </div>
+        <div class="opt-avatar" onclick="setHeroAvatar('Captain America', 'https://i.imgur.com/2Y5lY0l.png')">
+          <img src="https://i.imgur.com/2Y5lY0l.png" alt="Cap" onerror="this.src='https://via.placeholder.com/50/38bdf8/fff?text=CA'">
+          <span>Captain America</span>
+        </div>
+        <div class="opt-avatar" onclick="setHeroAvatar('Thor', 'https://i.imgur.com/8p01m2u.png')">
+          <img src="https://i.imgur.com/8p01m2u.png" alt="Thor" onerror="this.src='https://via.placeholder.com/50/a855f7/fff?text=TR'">
+          <span>Thor</span>
+        </div>
+        <div class="opt-avatar" onclick="setHeroAvatar('Iron Man', 'https://i.imgur.com/554Z76v.png')">
+          <img src="https://i.imgur.com/554Z76v.png" alt="Iron Man" onerror="this.src='https://via.placeholder.com/50/facc15/000?text=IM'">
+          <span>Iron Man</span>
+        </div>
+      </div>
+      <button onclick="toggleModal(false)" style="background:#e11d48; color:#fff; border:none; padding:8px; border-radius:15px; font-weight:bold; cursor:pointer;">CLOSE</button>
+    </div>
+  </div>
+
   <div class="container">
 
-    <!-- 🔴 1. Balance Card -->
-    <div class="balance-card">
-      <div class="balance-title">
-        <i class="fa-solid fa-wallet"></i> বর্তমান ব্যালেন্স
+    <!-- S.H.I.E.L.D. Secure Terminal Header -->
+    <div class="profile-card">
+      <div class="user-info">
+        <div class="avatar-box" onclick="toggleModal(true)">
+          <img id="user-avatar-img" src="https://i.imgur.com/554Z76v.png" alt="Hero" onerror="this.src='https://via.placeholder.com/50/facc15/000?text=IM'">
+        </div>
+        <div class="user-details">
+          <h3 id="hero-name-text">Tony Stark</h3>
+          <div class="hero-level-tag" id="hero-rank">LEVEL 4: IRON MAN</div>
+        </div>
       </div>
-      <div class="balance-amount" id="balance-box">
-        ৳ <span id="main-balance">0.00</span>
-      </div>
-      <div class="today-earned-badge">
-        <i class="fa-solid fa-chart-line"></i> +৳<span id="today-balance">0.00</span> আজ
+      <div class="terminal-status">
+        <i class="fa-solid fa-shield-halved"></i> SECURE
       </div>
     </div>
 
-    <!-- 🟡 2. Ad Player Card -->
+    <!-- 🔴 JARVIS HUD Balance Card -->
+    <div class="balance-card">
+      <div class="balance-title">
+        <i class="fa-solid fa-wallet"></i> STARK HUD BALANCE
+      </div>
+      <div class="balance-amount">
+        ৳ <span id="main-balance">0.00</span>
+      </div>
+      <div class="today-badge">
+        <i class="fa-solid fa-bolt"></i> +৳<span id="today-balance">0.00</span> আজ
+      </div>
+    </div>
+
+    <!-- 🔮 Infinity Stones Collector Box -->
+    <div class="stones-card">
+      <div class="stones-title">
+        <span><i class="fa-solid fa-gem"></i> INFINITY STONES</span>
+        <span id="stones-count" style="font-family: 'Orbitron'; font-size: 0.75rem;">0 / 6</span>
+      </div>
+      <div class="stones-grid">
+        <div class="stone-icon" id="stone-0" style="color: #ef4444;" title="Power Stone"><i class="fa-solid fa-gem"></i></div>
+        <div class="stone-icon" id="stone-1" style="color: #22c55e;" title="Time Stone"><i class="fa-solid fa-gem"></i></div>
+        <div class="stone-icon" id="stone-2" style="color: #38bdf8;" title="Space Stone"><i class="fa-solid fa-gem"></i></div>
+        <div class="stone-icon" id="stone-3" style="color: #facc15;" title="Reality Stone"><i class="fa-solid fa-gem"></i></div>
+        <div class="stone-icon" id="stone-4" style="color: #f97316;" title="Soul Stone"><i class="fa-solid fa-gem"></i></div>
+        <div class="stone-icon" id="stone-5" style="color: #a855f7;" title="Mind Stone"><i class="fa-solid fa-gem"></i></div>
+      </div>
+    </div>
+
+    <!-- 🟡 Avengers Mission Ad Card -->
     <div class="ad-card">
       <div class="card-top">
         <div class="left-section">
-          <div class="tv-icon-box">
-            <i class="fa-solid fa-tv"></i>
+          <div class="reactor-box">
+            <i class="fa-solid fa-atom"></i>
           </div>
           <div class="info-box">
-            <div class="title-row">
-              <span class="main-title">বিজ্ঞাপন দেখুন</span>
-              <span class="live-badge"><i class="fa-solid fa-bolt"></i> LIVE</span>
-            </div>
-            <div class="sub-title">মোট সম্পন্ন: <span id="completed-ads" style="color: #fff; font-weight: 800;">0</span> টি</div>
+            <span class="main-title">বিজ্ঞাপন দেখুন</span>
+            <div class="sub-title">সম্পন্ন মিশন: <span id="completed-ads" style="color:#facc15; font-weight:bold;">0</span> টি</div>
           </div>
         </div>
 
-        <button class="auto-btn" id="auto-btn" onclick="toggleAutoAds()">অটো স্টার্ট</button>
+        <button class="auto-btn" id="auto-btn" onclick="toggleAutoAds()">JARVIS AUTO</button>
       </div>
 
-      <!-- Progress Bar -->
       <div class="progress-container">
         <div class="progress-fill" id="progress-bar"></div>
       </div>
 
       <div class="card-footer">
-        <span style="color: #9ca3af;">∞ আনলিমিটেড এড</span>
-        <span id="status-text">স্টপড</span>
+        <span>U.C.M. PROTOCOL</span>
+        <span id="status-text" style="color: #6b7280;">STANDBY</span>
       </div>
     </div>
 
-    <!-- 3. Direct Link Button -->
+    <!-- 🚀 Thanos Bonus Offer Button -->
     <button class="bonus-btn" onclick="openDirectLink()">
-      🚀 🔥 Bonus Offer (Direct Ad)
+      🚀 🔥 THANOS SNAP BONUS (DIRECT AD)
     </button>
 
   </div>
@@ -369,36 +536,86 @@
       tg.expand();
     }
 
-    // Play Soft Beep FX Sound
-    function playBeepSound() {
+    // Marvel Sound Synthesizer (Shield / Lightning FX)
+    function playMarvelSound(type) {
       try {
         let ctx = new (window.AudioContext || window.webkitAudioContext)();
         let osc = ctx.createOscillator();
         let gain = ctx.createGain();
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(600, ctx.currentTime);
-        gain.gain.setValueAtTime(0.03, ctx.currentTime);
+        
+        if(type === 'thor') {
+          osc.type = "sawtooth";
+          osc.frequency.setValueAtTime(300, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(900, ctx.currentTime + 0.2);
+        } else {
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(500, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.15);
+        }
+
+        gain.gain.setValueAtTime(0.05, ctx.currentTime);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start();
-        osc.stop(ctx.currentTime + 0.1);
+        osc.stop(ctx.currentTime + 0.2);
       } catch(e) {}
     }
 
     let balance = parseFloat(localStorage.getItem('user_balance')) || 0;
     let todayEarned = parseFloat(localStorage.getItem('today_earned')) || 0;
     let completedAds = parseInt(localStorage.getItem('completed_ads')) || 0;
+    let heroName = localStorage.getItem('hero_name') || "Tony Stark";
+    let heroAvatar = localStorage.getItem('hero_avatar') || "https://i.imgur.com/554Z76v.png";
 
     let isRunning = false;
     let autoTimer = null;
 
+    // Init UI Values
+    document.getElementById('hero-name-text').innerText = heroName;
+    document.getElementById('user-avatar-img').src = heroAvatar;
     updateUI();
+
+    function toggleModal(show) {
+      document.getElementById('avatar-modal').classList.toggle('active', show);
+    }
+
+    function setHeroAvatar(name, imgUrl) {
+      heroName = name;
+      heroAvatar = imgUrl;
+      document.getElementById('hero-name-text').innerText = heroName;
+      document.getElementById('user-avatar-img').src = heroAvatar;
+      localStorage.setItem('hero_name', heroName);
+      localStorage.setItem('hero_avatar', heroAvatar);
+      toggleModal(false);
+    }
 
     function updateUI() {
       document.getElementById('main-balance').innerText = balance.toFixed(2);
       document.getElementById('today-balance').innerText = todayEarned.toFixed(2);
       document.getElementById('completed-ads').innerText = completedAds;
 
+      // Hero Level & Rank System
+      let rankText = "LEVEL 1: PETER PARKER (SPIDER-MAN)";
+      if (completedAds > 30) rankText = "LEVEL 4: TONY STARK (IRON MAN 🤖)";
+      else if (completedAds > 15) rankText = "LEVEL 3: THOR ODINSON ⚡";
+      else if (completedAds > 5) rankText = "LEVEL 2: STEVE ROGERS (CAP 🛡️)";
+      document.getElementById('hero-rank').innerText = rankText;
+
+      // Infinity Stones Activation (0 to 6)
+      let activeStonesCount = completedAds % 7;
+      if(completedAds > 0 && activeStonesCount === 0) activeStonesCount = 6;
+      
+      for(let i=0; i<6; i++) {
+        let stone = document.getElementById(`stone-${i}`);
+        if(i < activeStonesCount) {
+          stone.classList.add('active');
+        } else {
+          stone.classList.remove('active');
+        }
+      }
+      document.getElementById('stones-count').innerText = `${activeStonesCount} / 6`;
+
+      // Progress Bar
       let progress = (completedAds % 10) * 10;
       if (completedAds > 0 && progress === 0) progress = 100;
       document.getElementById('progress-bar').style.width = progress + '%';
@@ -408,30 +625,33 @@
       localStorage.setItem('completed_ads', completedAds);
     }
 
+    function showComicPop() {
+      let pop = document.getElementById('comic-pop');
+      const words = ["BAM! +৳10", "POW! +৳10", "ZAP! +৳10", "BOOM! +৳10", "SMASH! +৳10"];
+      pop.innerText = words[Math.floor(Math.random() * words.length)];
+      pop.classList.add('active');
+      setTimeout(() => pop.classList.remove('active'), 500);
+    }
+
     function addReward() {
       balance += REWARD_PER_AD;
       todayEarned += REWARD_PER_AD;
       completedAds += 1;
-      
-      // Pulse Animation on Balance
-      let balanceBox = document.getElementById('balance-box');
-      balanceBox.classList.add('pulse');
-      setTimeout(() => balanceBox.classList.remove('pulse'), 400);
-
+      playMarvelSound(completedAds % 2 === 0 ? 'thor' : 'shield');
+      showComicPop();
       updateUI();
     }
 
     function toggleAutoAds() {
-      playBeepSound();
       const btn = document.getElementById('auto-btn');
       const status = document.getElementById('status-text');
 
       if (!isRunning) {
         isRunning = true;
-        btn.innerText = "স্টপ";
+        btn.innerText = "ABORT";
         btn.classList.add('running');
-        status.innerText = "রানিং ⚡";
-        status.style.color = "#3b82f6";
+        status.innerText = "JARVIS ACTIVE ⚡";
+        status.style.color = "#38bdf8";
 
         runAutoLoop();
       } else {
@@ -445,37 +665,28 @@
       const btn = document.getElementById('auto-btn');
       const status = document.getElementById('status-text');
       
-      btn.innerText = "অটো স্টার্ট";
+      btn.innerText = "JARVIS AUTO";
       btn.classList.remove('running');
-      status.innerText = "স্টপড";
+      status.innerText = "STANDBY";
       status.style.color = "#6b7280";
     }
 
     function runAutoLoop() {
       if (!isRunning) return;
 
-      if (typeof show_11477768 === 'function') {
-        show_11477768().then(() => {
-          addReward();
-          scheduleNextAd();
-        }).catch((err) => {
-          console.log("Ad Error / Closed:", err);
-          addReward();
-          scheduleNextAd();
-        });
-      } else {
-        scheduleNextAd(3000);
-      }
-    }
+      addReward();
 
-    function scheduleNextAd(customDelay) {
-      if (isRunning) {
-        autoTimer = setTimeout(runAutoLoop, customDelay || AUTO_DELAY_MS);
+      if (typeof show_11477768 === 'function') {
+        try {
+          show_11477768().catch((e) => console.log("Ad closed", e));
+        } catch(e) {}
       }
+
+      autoTimer = setTimeout(runAutoLoop, AUTO_DELAY_MS);
     }
 
     function openDirectLink() {
-      playBeepSound();
+      playMarvelSound('thor');
       if (DIRECT_LINK_URL) {
         if (tg && tg.openLink) {
           tg.openLink(DIRECT_LINK_URL);
@@ -486,4 +697,4 @@
     }
   </script>
 </body>
-</html>
+  </html>
