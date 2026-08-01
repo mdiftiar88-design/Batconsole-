@@ -1,138 +1,237 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Gotham Bat-Console</title>
+
+  <!-- Telegram Web App SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <!-- Monetag Rewarded Interstitial SDK -->
+
+  <!-- Monetag SDK -->
   <script src='//libtl.com/sdk.js' data-zone='11477768' data-sdk='show_11477768'></script>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: monospace; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
     body {
-      background-color: #020603;
-      color: #22c55e;
+      background-color: #030712;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    /* --- EXACT MATCH UI CARD --- */
+    .ad-card {
+      background: linear-gradient(135deg, #0d0b27 0%, #080619 100%);
+      border: 1px solid rgba(139, 92, 246, 0.25);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(124, 58, 237, 0.15);
       display: flex;
       flex-direction: column;
+      gap: 14px;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .left-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .tv-icon-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.2));
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      padding: 20px;
-      text-align: center;
+      font-size: 1.5rem;
+      color: #a7f3d0;
+      flex-shrink: 0;
     }
-    .card {
-      background: rgba(6, 20, 11, 0.9);
-      border: 1px solid #153e22;
-      border-radius: 16px;
-      padding: 24px;
-      width: 100%;
-      max-width: 360px;
-      box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+
+    .info-box {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
-    .hero-img { width: 140px; height: auto; margin-bottom: 15px; }
-    .status { font-size: 14px; margin-bottom: 15px; color: #4ade80; }
-    .counter { font-size: 28px; font-weight: bold; color: #fff; margin: 15px 0; }
-    .btn {
-      background: #22c55e;
-      color: #000;
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .main-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .live-badge {
+      background: rgba(139, 92, 246, 0.2);
+      border: 1px solid rgba(168, 85, 247, 0.5);
+      color: #c084fc;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .sub-title {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    /* Gradient Action Button */
+    .watch-btn {
+      background: linear-gradient(90deg, #8b5cf6 0%, #06b6d4 100%);
+      color: #ffffff;
       border: none;
-      padding: 14px 24px;
-      font-size: 16px;
-      font-weight: bold;
-      border-radius: 10px;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 0.95rem;
+      font-weight: 700;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .watch-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Progress Bar */
+    .progress-container {
       width: 100%;
-      margin-top: 10px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      overflow: hidden;
     }
-    .btn-ad {
-      background: #eab308;
-      color: #000;
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #a855f7, #06b6d4);
+      border-radius: 10px;
+      transition: width 0.4s ease;
     }
-    .btn.active { background: #ef4444; color: #fff; }
+
+    .bottom-info {
+      text-align: right;
+      font-size: 0.8rem;
+      color: #64748b;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <img src="https://pngimg.com/uploads/batman/batman_PNG111.png" class="hero-img" alt="Batman">
-    <h2>BAT-COMPUTER v4.0</h2>
-    <p class="status" id="status-text">STATUS: READY</p>
-    
-    <div class="counter"><span id="ad-count">0</span> ADS</div>
+  <div class="container">
+    <div class="ad-card">
+      <div class="card-top">
+        <div class="left-section">
+          <div class="tv-icon-box">
+            <i class="fa-solid fa-tv"></i>
+          </div>
+          <div class="info-box">
+            <div class="title-row">
+              <span class="main-title">বিজ্ঞাপন দেখুন</span>
+              <span class="live-badge"><i class="fa-solid fa-bolt"></i> LIVE</span>
+            </div>
+            <div class="sub-title"><span id="completed-count">0</span> টি দেখা হয়েছে</div>
+          </div>
+        </div>
 
-    <!-- Manual Watch Button -->
-    <button class="btn btn-ad" onclick="watchAdManual()">🎬 WATCH AD (+1)</button>
+        <!-- Watch Button -->
+        <button class="watch-btn" onclick="watchAdManual()">
+          <i class="fa-solid fa-tv"></i> দেখুন
+        </button>
+      </div>
 
-    <!-- Auto Ad Button -->
-    <button class="btn" id="start-btn" onclick="toggleAuto()">⚡ AUTO ADS START</button>
+      <!-- Animated Progress Bar -->
+      <div class="progress-container">
+        <div class="progress-fill" id="progress-bar"></div>
+      </div>
+
+      <div class="bottom-info">
+        অনলিমিটেড সুযোগ চালু আছে ✨
+      </div>
+    </div>
   </div>
 
   <script>
+    // Telegram Integration
     if (window.Telegram && window.Telegram.WebApp) {
       window.Telegram.WebApp.ready();
       window.Telegram.WebApp.expand();
     }
 
-    let isRunning = false;
-    let timer = null;
-    let count = 0;
+    let adCount = parseInt(localStorage.getItem('unlimited_ad_count')) || 0;
+    updateUI();
 
-    // Manual Single Ad
     function watchAdManual() {
-      showAdLogic();
-    }
-
-    // Toggle Auto Ads
-    function toggleAuto() {
-      const btn = document.getElementById('start-btn');
-      const status = document.getElementById('status-text');
-
-      if (!isRunning) {
-        isRunning = true;
-        btn.innerText = "STOP AUTO ADS";
-        btn.classList.add('active');
-        status.innerText = "STATUS: AUTO ADS RUNNING ⚡";
-        status.style.color = "#22c55e";
-
-        // Start running immediately
-        runAutoLoop();
-      } else {
-        isRunning = false;
-        btn.innerText = "⚡ AUTO ADS START";
-        btn.classList.remove('active');
-        status.innerText = "STATUS: STOPPED";
-        status.style.color = "#ef4444";
-        clearTimeout(timer);
-      }
-    }
-
-    // Continuous Loop for Auto Ads
-    function runAutoLoop() {
-      if (!isRunning) return;
-
-      showAdLogic(() => {
-        // Next ad after 3 seconds of closing the previous one
-        if (isRunning) {
-          timer = setTimeout(runAutoLoop, 3000);
-        }
-      });
-    }
-
-    // Core Ad Logic
-    function showAdLogic(callback) {
       if (typeof show_11477768 === 'function') {
         show_11477768().then(() => {
-          count++;
-          document.getElementById('ad-count').innerText = count;
-          if (callback) callback();
+          adCount++;
+          localStorage.setItem('unlimited_ad_count', adCount);
+          updateUI();
         }).catch((err) => {
-          console.log("Ad Error / Closed:", err);
-          if (callback) callback();
+          console.log("Ad Closed / Error:", err);
+          // টেস্ট করার জন্য বা ব্যর্থ হলেও অ্যাড কাউন্ট বাড়াতে চাইলে নিচের লাইন দুটো আনকমেন্ট করতে পারিস:
+          // adCount++;
+          // updateUI();
         });
       } else {
-        console.log("SDK not loaded yet");
-        if (callback) setTimeout(callback, 3000);
+        alert("SDK এখনও লোড হয়নি, কিছুক্ষণ পর চেষ্টা করুন।");
       }
+    }
+
+    function updateUI() {
+      document.getElementById('completed-count').innerText = adCount;
+      
+      // প্রোগ্রেস বার প্রতিটি ১০টি অ্যাডের সাইকেলে এনিমেট হবে
+      let progressPercent = (adCount % 10) * 10;
+      if (adCount > 0 && progressPercent === 0) progressPercent = 100;
+      document.getElementById('progress-bar').style.width = progressPercent + '%';
     }
   </script>
 </body>
