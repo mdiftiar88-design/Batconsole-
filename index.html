@@ -43,9 +43,16 @@
       cursor: pointer;
       width: 100%;
       margin-top: 10px;
+      transition: transform 0.1s ease;
     }
+    .btn:active { transform: scale(0.98); }
     .btn-ad {
       background: #eab308;
+      color: #000;
+    }
+    /* 3 Number Direct Link Button Style */
+    .btn-direct {
+      background: #06b6d4;
       color: #000;
     }
     .btn.active { background: #ef4444; color: #fff; }
@@ -60,17 +67,25 @@
     
     <div class="counter"><span id="ad-count">0</span> ADS</div>
 
-    <!-- Manual Watch Button -->
+    <!-- 1. Manual Watch Button -->
     <button class="btn btn-ad" onclick="watchAdManual()">🎬 WATCH AD (+1)</button>
 
-    <!-- Auto Ad Button -->
+    <!-- 2. Auto Ad Button -->
     <button class="btn" id="start-btn" onclick="toggleAuto()">⚡ AUTO ADS START</button>
+
+    <!-- 3. Direct Link Button -->
+    <button class="btn btn-direct" onclick="openDirectLink()">🚀 DIRECT LINK ADS</button>
   </div>
 
   <script>
+    // Monetag Direct Link Added Here
+    const MONETAG_DIRECT_LINK = "Https://omg10.com/4/11467098"; 
+
+    let tg = null;
     if (window.Telegram && window.Telegram.WebApp) {
-      window.Telegram.WebApp.ready();
-      window.Telegram.WebApp.expand();
+      tg = window.Telegram.WebApp;
+      tg.ready();
+      tg.expand();
     }
 
     let isRunning = false;
@@ -134,6 +149,17 @@
         if (callback) setTimeout(callback, 3000);
       }
     }
+
+    // 3 Number Button Action
+    function openDirectLink() {
+      if (MONETAG_DIRECT_LINK && MONETAG_DIRECT_LINK.trim() !== "") {
+        if (tg && tg.openLink) {
+          tg.openLink(MONETAG_DIRECT_LINK);
+        } else {
+          window.open(MONETAG_DIRECT_LINK, '_blank');
+        }
+      }
+    }
   </script>
 </body>
-  </html>
+</html>
