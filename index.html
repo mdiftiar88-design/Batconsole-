@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   
-  <title>MARVEL U.C.M. S.H.I.E.L.D. Terminal</title>
+  <title>CYBER HUD Terminal</title>
 
   <!-- Telegram SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -13,7 +13,7 @@
   <script src='//libtl.com/sdk.js' data-zone='11477768' data-sdk='show_11477768'></script>
 
   <!-- Fonts & Icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Orbitron:wght@700;900&family=Hind+Siliguri:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
   <style>
@@ -21,13 +21,13 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Rajdhani', sans-serif;
+      font-family: 'Hind Siliguri', sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background: #08070c;
-      color: #fff;
+      background: #030704;
+      color: #e0ffe8;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -37,14 +37,14 @@
       position: relative;
     }
 
-    /* 3D Arc Reactor Ambient Background */
+    /* Cyber Matrix Ambient Background Glow */
     body::before {
       content: '';
       position: absolute;
-      width: 320px;
-      height: 320px;
-      background: radial-gradient(circle, rgba(225, 29, 72, 0.35) 0%, rgba(0,0,0,0) 70%);
-      top: 5%;
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, rgba(0, 255, 102, 0.15) 0%, rgba(0,0,0,0) 70%);
+      top: 10%;
       left: 50%;
       transform: translateX(-50%);
       border-radius: 50%;
@@ -56,12 +56,12 @@
       max-width: 400px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
       position: relative;
       z-index: 1;
     }
 
-    /* Pop-up Comic Text */
+    /* Pop-up Text */
     .comic-pop {
       position: absolute;
       top: 35%;
@@ -69,11 +69,11 @@
       transform: translate(-50%, -50%) scale(0);
       font-family: 'Bangers', cursive;
       font-size: 3.2rem;
-      color: #facc15;
-      text-shadow: 4px 4px 0 #e11d48, -3px -3px 0 #000;
+      color: #00ff66;
+      text-shadow: 0 0 10px #00ff66, 3px 3px 0 #000;
       pointer-events: none;
       z-index: 100;
-      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease;
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       opacity: 0;
     }
 
@@ -82,17 +82,16 @@
       opacity: 1;
     }
 
-    /* --- 3D Glass Profile Card --- */
+    /* --- Cyber HUD Terminal Header / Profile Box --- */
     .profile-card {
-      background: rgba(22, 22, 35, 0.75);
-      backdrop-filter: blur(12px);
-      border: 1.5px solid rgba(225, 29, 72, 0.6);
-      border-radius: 22px;
-      padding: 14px 16px;
+      background: rgba(6, 18, 10, 0.9);
+      border: 1.5px solid #00ff66;
+      border-radius: 20px;
+      padding: 15px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 15px rgba(0, 255, 102, 0.25), inset 0 0 10px rgba(0, 255, 102, 0.1);
     }
 
     .user-info {
@@ -102,22 +101,17 @@
     }
 
     .avatar-box {
-      width: 54px;
-      height: 54px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
-      border: 2px solid #facc15;
+      border: 2px solid #00ff66;
       overflow: hidden;
-      background: #181824;
+      background: #020c05;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 0 15px rgba(250, 204, 21, 0.4), inset 0 0 8px rgba(0,0,0,0.8);
-      transition: transform 0.2s;
-    }
-    
-    .avatar-box:active {
-      transform: scale(0.93);
+      box-shadow: 0 0 10px rgba(0, 255, 102, 0.5);
     }
 
     .avatar-box img {
@@ -127,52 +121,51 @@
     }
 
     .user-details h3 {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 800;
-      color: #fff;
+      color: #ffffff;
     }
 
     .hero-level-tag {
       font-family: 'Orbitron', sans-serif;
-      font-size: 0.68rem;
-      color: #facc15;
+      font-size: 0.72rem;
+      color: #00ff66;
       font-weight: 900;
-      background: rgba(250, 204, 21, 0.12);
-      padding: 3px 8px;
-      border-radius: 8px;
-      border: 1px solid rgba(250, 204, 21, 0.3);
+      background: rgba(0, 255, 102, 0.1);
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 255, 102, 0.3);
       display: inline-block;
-      margin-top: 3px;
+      margin-top: 2px;
     }
 
     .terminal-status {
       font-family: 'Orbitron', sans-serif;
       font-size: 0.65rem;
-      color: #38bdf8;
-      background: rgba(56, 189, 248, 0.1);
-      border: 1px solid rgba(56, 189, 248, 0.4);
-      padding: 6px 10px;
-      border-radius: 12px;
+      color: #00ff66;
+      background: rgba(0, 255, 102, 0.1);
+      border: 1px solid rgba(0, 255, 102, 0.4);
+      padding: 4px 8px;
+      border-radius: 10px;
       text-align: center;
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+      text-shadow: 0 0 5px rgba(0, 255, 102, 0.5);
     }
 
-    /* --- 3D Balance Card --- */
+    /* --- JARVIS HUD Balance Card --- */
     .balance-card {
-      background: rgba(22, 22, 35, 0.75);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 22px;
-      padding: 20px;
+      background: rgba(6, 18, 10, 0.9);
+      border: 1px solid rgba(0, 255, 102, 0.25);
+      border-radius: 20px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(0, 255, 102, 0.08);
     }
 
     .balance-title {
-      color: #9ca3af;
-      font-size: 0.85rem;
+      color: #83b392;
+      font-size: 0.8rem;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -181,44 +174,41 @@
 
     .balance-amount {
       font-family: 'Orbitron', sans-serif;
-      font-size: 2.4rem;
+      font-size: 2.3rem;
       font-weight: 900;
-      color: #facc15;
-      text-shadow: 0 4px 15px rgba(250, 204, 21, 0.35);
+      color: #00ff66;
+      text-shadow: 0 0 12px rgba(0, 255, 102, 0.5);
     }
 
     .today-badge {
       align-self: flex-start;
-      background: rgba(34, 197, 94, 0.15);
-      border: 1px solid #22c55e;
-      color: #4ade80;
-      font-size: 0.8rem;
-      padding: 4px 12px;
-      border-radius: 16px;
+      background: rgba(0, 255, 102, 0.12);
+      border: 1px solid #00ff66;
+      color: #00ff66;
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 15px;
       font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 6px;
-      box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
+      gap: 5px;
     }
 
-    /* --- 3D Infinity Stones Grid --- */
+    /* --- Infinity Stones Collector Grid --- */
     .stones-card {
-      background: rgba(22, 22, 35, 0.75);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 22px;
-      padding: 16px;
+      background: rgba(6, 18, 10, 0.9);
+      border: 1px solid rgba(0, 255, 102, 0.2);
+      border-radius: 20px;
+      padding: 15px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      gap: 10px;
     }
 
     .stones-title {
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       font-weight: 800;
-      color: #c084fc;
+      color: #00ff66;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -227,40 +217,38 @@
     .stones-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
-      gap: 8px;
+      gap: 6px;
     }
 
     .stone-icon {
       aspect-ratio: 1;
-      border-radius: 12px;
-      background: #12121c;
-      border: 1.5px dashed rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      background: #020c05;
+      border: 1px dashed rgba(0, 255, 102, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.1rem;
-      opacity: 0.25;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      font-size: 1rem;
+      opacity: 0.3;
+      transition: all 0.3s ease;
     }
 
     .stone-icon.active {
       opacity: 1;
       border-style: solid;
-      box-shadow: 0 0 15px currentColor, inset 0 0 8px currentColor;
-      transform: translateY(-2px) scale(1.08);
+      box-shadow: 0 0 12px currentColor;
+      transform: scale(1.05);
     }
 
-    /* --- 3D Mission Card --- */
+    /* --- Mission Ad Card --- */
     .ad-card {
-      background: rgba(22, 22, 35, 0.75);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 22px;
+      background: rgba(6, 18, 10, 0.9);
+      border: 1px solid rgba(0, 255, 102, 0.2);
+      border-radius: 20px;
       padding: 18px;
       display: flex;
       flex-direction: column;
       gap: 14px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     }
 
     .card-top {
@@ -281,20 +269,20 @@
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: radial-gradient(circle, #38bdf8 0%, #0369a1 100%);
-      border: 2px solid #38bdf8;
+      background: radial-gradient(circle, #00ff66 0%, #02421a 100%);
+      border: 2px solid #00ff66;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 1.3rem;
-      color: #fff;
-      box-shadow: 0 0 15px rgba(56, 189, 248, 0.7);
+      color: #000;
+      box-shadow: 0 0 12px rgba(0, 255, 102, 0.6);
       animation: reactorGlow 2s infinite alternate;
     }
 
     @keyframes reactorGlow {
-      0% { box-shadow: 0 0 8px rgba(56, 189, 248, 0.4); transform: scale(0.98); }
-      100% { box-shadow: 0 0 22px rgba(56, 189, 248, 1); transform: scale(1.03); }
+      0% { box-shadow: 0 0 8px rgba(0, 255, 102, 0.4); }
+      100% { box-shadow: 0 0 20px rgba(0, 255, 102, 0.9); }
     }
 
     .info-box {
@@ -304,98 +292,91 @@
     }
 
     .main-title {
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 800;
       color: #ffffff;
     }
 
     .sub-title {
-      font-size: 0.85rem;
-      color: #9ca3af;
-      font-weight: 600;
+      font-size: 0.78rem;
+      color: #83b392;
     }
 
     .auto-btn {
-      background: linear-gradient(135deg, #e11d48 0%, #9f1239 100%);
-      color: #ffffff;
-      border: 1px solid #fecdd3;
-      padding: 12px 20px;
+      background: linear-gradient(135deg, #00ff66 0%, #008033 100%);
+      color: #000;
+      border: 1px solid #a3ffc2;
+      padding: 11px 18px;
       border-radius: 25px;
       font-family: 'Orbitron', sans-serif;
       font-size: 0.8rem;
       font-weight: 900;
       cursor: pointer;
-      box-shadow: 0 6px 15px rgba(225, 29, 72, 0.4);
-      transition: all 0.2s ease;
-    }
-
-    .auto-btn:active {
-      transform: scale(0.95);
+      box-shadow: 0 0 12px rgba(0, 255, 102, 0.4);
     }
 
     .auto-btn.running {
-      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-      box-shadow: 0 6px 15px rgba(56, 189, 248, 0.5);
-      border-color: #38bdf8;
+      background: linear-gradient(135deg, #ff0055 0%, #990033 100%);
+      box-shadow: 0 0 12px rgba(255, 0, 85, 0.6);
+      border-color: #ff80aa;
+      color: #fff;
     }
 
     .progress-container {
       width: 100%;
-      height: 8px;
-      background: #12121c;
+      height: 6px;
+      background: #020c05;
       border-radius: 10px;
       overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(0,255,102,0.15);
     }
 
     .progress-fill {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #e11d48, #facc15, #22c55e, #38bdf8);
+      background: linear-gradient(90deg, #00ff66, #00f0ff, #ffea00);
       border-radius: 10px;
       transition: width 0.3s ease;
+      box-shadow: 0 0 8px #00ff66;
     }
 
     .card-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.78rem;
-      color: #6b7280;
-      font-weight: 700;
+      font-size: 0.75rem;
+      color: #588063;
+      font-weight: 600;
     }
 
-    /* 3D Bonus Button */
+    /* Cyber Bonus Button */
     .bonus-btn {
       width: 100%;
-      background: linear-gradient(180deg, #fde047 0%, #ca8a04 100%);
+      background: linear-gradient(90deg, #00ff66 0%, #00993d 100%);
       color: #000;
-      border: 1px solid #fef08a;
+      border: 2px solid #b3ffcc;
       border-radius: 25px;
-      padding: 16px 20px;
+      padding: 15px 20px;
       font-family: 'Orbitron', sans-serif;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 900;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      box-shadow: 0 8px 25px rgba(250, 204, 21, 0.4), inset 0 2px 2px rgba(255, 255, 255, 0.8);
-      transition: all 0.2s ease;
+      box-shadow: 0 0 20px rgba(0, 255, 102, 0.3);
     }
 
     .bonus-btn:active {
-      transform: translateY(2px) scale(0.97);
-      box-shadow: 0 3px 10px rgba(250, 204, 21, 0.3);
+      transform: scale(0.97);
     }
 
-    /* Avatar Selector Modal */
+    /* Avatar Modal Selector */
     .modal {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(8px);
+      background: rgba(0,0,0,0.88);
       display: none;
       justify-content: center;
       align-items: center;
@@ -404,81 +385,80 @@
     }
     .modal.active { display: flex; }
     .modal-content {
-      background: #12121c;
-      border: 2px solid #facc15;
-      padding: 22px;
-      border-radius: 24px;
+      background: #06120a;
+      border: 2px solid #00ff66;
+      padding: 20px;
+      border-radius: 20px;
       width: 100%;
       max-width: 320px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 15px;
       text-align: center;
-      box-shadow: 0 0 30px rgba(250, 204, 21, 0.3);
+      box-shadow: 0 0 25px rgba(0, 255, 102, 0.3);
     }
     .avatar-options {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+      gap: 10px;
     }
     .opt-avatar {
-      background: #1a1a2e;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 14px;
-      padding: 12px;
+      background: #020c05;
+      border: 1px solid rgba(0, 255, 102, 0.3);
+      border-radius: 12px;
+      padding: 10px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 6px;
-      transition: transform 0.2s;
     }
-    .opt-avatar:hover { transform: scale(1.05); }
     .opt-avatar img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
-    .opt-avatar span { font-size: 0.8rem; font-weight: bold; }
+    .opt-avatar span { font-size: 0.75rem; font-weight: bold; color: #00ff66; }
   </style>
 </head>
 <body>
 
+  <!-- Pop-up Text -->
   <div class="comic-pop" id="comic-pop">BAM! +৳10</div>
 
   <!-- Hero Avatar Selection Modal -->
   <div class="modal" id="avatar-modal">
     <div class="modal-content">
-      <h3 style="color: #facc15; font-family: 'Orbitron'; font-size: 1rem;">SELECT HERO AVATAR</h3>
+      <h3 style="color: #00ff66; font-family: 'Orbitron'; font-size: 1rem;">SELECT HERO AVATAR</h3>
       <div class="avatar-options">
-        <div class="opt-avatar" onclick="setHeroAvatar('Spider-Man', 'https://api.dicebear.com/7.x/bottts/svg?seed=SpiderMan')">
-          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=SpiderMan" alt="Spider-Man">
+        <div class="opt-avatar" onclick="setHeroAvatar('Spider-Man', 'https://i.imgur.com/835cd6s.png')">
+          <img src="https://i.imgur.com/835cd6s.png" alt="Spider-Man" onerror="this.src='https://via.placeholder.com/50/00ff66/000?text=SM'">
           <span>Spider-Man</span>
         </div>
-        <div class="opt-avatar" onclick="setHeroAvatar('Captain America', 'https://api.dicebear.com/7.x/bottts/svg?seed=Cap')">
-          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Cap" alt="Cap">
+        <div class="opt-avatar" onclick="setHeroAvatar('Captain America', 'https://i.imgur.com/2Y5lY0l.png')">
+          <img src="https://i.imgur.com/2Y5lY0l.png" alt="Cap" onerror="this.src='https://via.placeholder.com/50/00ff66/000?text=CA'">
           <span>Captain America</span>
         </div>
-        <div class="opt-avatar" onclick="setHeroAvatar('Thor', 'https://api.dicebear.com/7.x/bottts/svg?seed=Thor')">
-          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Thor" alt="Thor">
+        <div class="opt-avatar" onclick="setHeroAvatar('Thor', 'https://i.imgur.com/8p01m2u.png')">
+          <img src="https://i.imgur.com/8p01m2u.png" alt="Thor" onerror="this.src='https://via.placeholder.com/50/00ff66/000?text=TR'">
           <span>Thor</span>
         </div>
-        <div class="opt-avatar" onclick="setHeroAvatar('Iron Man', 'https://api.dicebear.com/7.x/bottts/svg?seed=IronMan')">
-          <img src="https://api.dicebear.com/7.x/bottts/svg?seed=IronMan" alt="Iron Man">
+        <div class="opt-avatar" onclick="setHeroAvatar('Iron Man', 'https://i.imgur.com/554Z76v.png')">
+          <img src="https://i.imgur.com/554Z76v.png" alt="Iron Man" onerror="this.src='https://via.placeholder.com/50/00ff66/000?text=IM'">
           <span>Iron Man</span>
         </div>
       </div>
-      <button onclick="toggleModal(false)" style="background:#e11d48; color:#fff; border:none; padding:10px; border-radius:15px; font-weight:bold; cursor:pointer;">CLOSE</button>
+      <button onclick="toggleModal(false)" style="background:#00ff66; color:#000; border:none; padding:8px; border-radius:15px; font-weight:bold; cursor:pointer;">CLOSE</button>
     </div>
   </div>
 
   <div class="container">
 
-    <!-- Profile Header -->
+    <!-- Cyber Terminal Header -->
     <div class="profile-card">
       <div class="user-info">
         <div class="avatar-box" onclick="toggleModal(true)">
-          <img id="user-avatar-img" src="https://api.dicebear.com/7.x/bottts/svg?seed=IronMan" alt="Hero">
+          <img id="user-avatar-img" src="https://i.imgur.com/554Z76v.png" alt="Hero" onerror="this.src='https://via.placeholder.com/50/00ff66/000?text=IM'">
         </div>
         <div class="user-details">
-          <h3 id="hero-name-text">Iron Man</h3>
-          <div class="hero-level-tag" id="hero-rank">LEVEL 1: SPIDER-MAN</div>
+          <h3 id="hero-name-text">Tony Stark</h3>
+          <div class="hero-level-tag" id="hero-rank">LEVEL 4: IRON MAN</div>
         </div>
       </div>
       <div class="terminal-status">
@@ -486,36 +466,36 @@
       </div>
     </div>
 
-    <!-- JARVIS HUD Balance Card -->
+    <!-- 🟢 HUD Balance Card -->
     <div class="balance-card">
       <div class="balance-title">
-        <i class="fa-solid fa-wallet"></i> STARK HUD BALANCE
+        <i class="fa-solid fa-wallet"></i> MATRIX HUD BALANCE
       </div>
       <div class="balance-amount">
         ৳ <span id="main-balance">0.00</span>
       </div>
       <div class="today-badge">
-        <i class="fa-solid fa-bolt"></i> +৳<span id="today-balance">0.00</span> TODAY
+        <i class="fa-solid fa-bolt"></i> +৳<span id="today-balance">0.00</span> আজ
       </div>
     </div>
 
-    <!-- Infinity Stones Box -->
+    <!-- 🔮 Infinity Stones Collector Box -->
     <div class="stones-card">
       <div class="stones-title">
         <span><i class="fa-solid fa-gem"></i> INFINITY STONES</span>
         <span id="stones-count" style="font-family: 'Orbitron'; font-size: 0.75rem;">0 / 6</span>
       </div>
       <div class="stones-grid">
-        <div class="stone-icon" id="stone-0" style="color: #ef4444;" title="Power Stone"><i class="fa-solid fa-gem"></i></div>
-        <div class="stone-icon" id="stone-1" style="color: #22c55e;" title="Time Stone"><i class="fa-solid fa-gem"></i></div>
-        <div class="stone-icon" id="stone-2" style="color: #38bdf8;" title="Space Stone"><i class="fa-solid fa-gem"></i></div>
-        <div class="stone-icon" id="stone-3" style="color: #facc15;" title="Reality Stone"><i class="fa-solid fa-gem"></i></div>
-        <div class="stone-icon" id="stone-4" style="color: #f97316;" title="Soul Stone"><i class="fa-solid fa-gem"></i></div>
-        <div class="stone-icon" id="stone-5" style="color: #a855f7;" title="Mind Stone"><i class="fa-solid fa-gem"></i></div>
+        <div class="stone-icon" id="stone-0" style="color: #ff3366;" title="Power Stone"><i class="fa-solid fa-gem"></i></div>
+        <div class="stone-icon" id="stone-1" style="color: #00ff66;" title="Time Stone"><i class="fa-solid fa-gem"></i></div>
+        <div class="stone-icon" id="stone-2" style="color: #00f0ff;" title="Space Stone"><i class="fa-solid fa-gem"></i></div>
+        <div class="stone-icon" id="stone-3" style="color: #ffea00;" title="Reality Stone"><i class="fa-solid fa-gem"></i></div>
+        <div class="stone-icon" id="stone-4" style="color: #ff9900;" title="Soul Stone"><i class="fa-solid fa-gem"></i></div>
+        <div class="stone-icon" id="stone-5" style="color: #cc00ff;" title="Mind Stone"><i class="fa-solid fa-gem"></i></div>
       </div>
     </div>
 
-    <!-- Avengers Mission Card -->
+    <!-- 🟢 Mission Ad Card -->
     <div class="ad-card">
       <div class="card-top">
         <div class="left-section">
@@ -523,8 +503,8 @@
             <i class="fa-solid fa-atom"></i>
           </div>
           <div class="info-box">
-            <span class="main-title">WATCH ADVERTISEMENTS</span>
-            <div class="sub-title">COMPLETED: <span id="completed-ads" style="color:#facc15; font-weight:bold;">0</span> MISSION(S)</div>
+            <span class="main-title">বিজ্ঞাপন দেখুন</span>
+            <div class="sub-title">সম্পন্ন মিশন: <span id="completed-ads" style="color:#00ff66; font-weight:bold;">0</span> টি</div>
           </div>
         </div>
 
@@ -536,12 +516,12 @@
       </div>
 
       <div class="card-footer">
-        <span>U.C.M. PROTOCOL</span>
-        <span id="status-text" style="color: #6b7280;">STANDBY</span>
+        <span>CYBER PROTOCOL</span>
+        <span id="status-text" style="color: #588063;">STANDBY</span>
       </div>
     </div>
 
-    <!-- Direct Ad Button -->
+    <!-- 🚀 Thanos Bonus Offer Button -->
     <button class="bonus-btn" onclick="openDirectLink()">
       🚀 🔥 THANOS SNAP BONUS (DIRECT AD)
     </button>
@@ -551,7 +531,7 @@
   <script>
     const DIRECT_LINK_URL = "https://omg10.com/4/11467098";
     const REWARD_PER_AD = 10;
-    const AUTO_DELAY_MS = 3500;
+    const AUTO_DELAY_MS = 2000;
 
     let tg = null;
     if (window.Telegram && window.Telegram.WebApp) {
@@ -560,48 +540,41 @@
       tg.expand();
     }
 
-    let audioCtx = null;
-    function initAudio() {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-    }
-
+    // Marvel Sound Synthesizer (Shield / Lightning FX)
     function playMarvelSound(type) {
       try {
-        initAudio();
-        if (!audioCtx) return;
-
-        let osc = audioCtx.createOscillator();
-        let gain = audioCtx.createGain();
+        let ctx = new (window.AudioContext || window.webkitAudioContext)();
+        let osc = ctx.createOscillator();
+        let gain = ctx.createGain();
         
-        if (type === 'thor') {
+        if(type === 'thor') {
           osc.type = "sawtooth";
-          osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 0.2);
+          osc.frequency.setValueAtTime(300, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(900, ctx.currentTime + 0.2);
         } else {
           osc.type = "sine";
-          osc.frequency.setValueAtTime(500, audioCtx.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.15);
+          osc.frequency.setValueAtTime(500, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.15);
         }
 
-        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.05, ctx.currentTime);
         osc.connect(gain);
-        gain.connect(audioCtx.destination);
+        gain.connect(ctx.destination);
         osc.start();
-        osc.stop(audioCtx.currentTime + 0.2);
+        osc.stop(ctx.currentTime + 0.2);
       } catch(e) {}
     }
 
-    // Load Saved State
+    let balance = parseFloat(localStorage.getItem('user_balance')) || 0;
+    let todayEarned = parseFloat(localStorage.getItem('today_earned')) || 0;
     let completedAds = parseInt(localStorage.getItem('completed_ads')) || 0;
-    let balance = completedAds * REWARD_PER_AD; // 10 Tk per ad exact sync
-    let todayEarned = balance;
-    let heroName = localStorage.getItem('hero_name') || "Iron Man";
-    let heroAvatar = localStorage.getItem('hero_avatar') || "https://api.dicebear.com/7.x/bottts/svg?seed=IronMan";
+    let heroName = localStorage.getItem('hero_name') || "Tony Stark";
+    let heroAvatar = localStorage.getItem('hero_avatar') || "https://i.imgur.com/554Z76v.png";
 
     let isRunning = false;
     let autoTimer = null;
 
+    // Init UI Values
     document.getElementById('hero-name-text').innerText = heroName;
     document.getElementById('user-avatar-img').src = heroAvatar;
     updateUI();
@@ -621,27 +594,24 @@
     }
 
     function updateUI() {
-      balance = completedAds * REWARD_PER_AD;
-      todayEarned = balance;
-
       document.getElementById('main-balance').innerText = balance.toFixed(2);
       document.getElementById('today-balance').innerText = todayEarned.toFixed(2);
       document.getElementById('completed-ads').innerText = completedAds;
 
-      // Level System
+      // Hero Level & Rank System
       let rankText = "LEVEL 1: PETER PARKER (SPIDER-MAN)";
-      if (completedAds >= 30) rankText = "LEVEL 4: TONY STARK (IRON MAN 🤖)";
-      else if (completedAds >= 15) rankText = "LEVEL 3: THOR ODINSON ⚡";
-      else if (completedAds >= 5) rankText = "LEVEL 2: STEVE ROGERS (CAP 🛡️)";
+      if (completedAds > 30) rankText = "LEVEL 4: TONY STARK (IRON MAN 🤖)";
+      else if (completedAds > 15) rankText = "LEVEL 3: THOR ODINSON ⚡";
+      else if (completedAds > 5) rankText = "LEVEL 2: STEVE ROGERS (CAP 🛡️)";
       document.getElementById('hero-rank').innerText = rankText;
 
-      // Infinity Stones Logic (0 to 6)
-      let activeStonesCount = completedAds % 6;
-      if (completedAds > 0 && activeStonesCount === 0) activeStonesCount = 6;
+      // Infinity Stones Activation (0 to 6)
+      let activeStonesCount = completedAds % 7;
+      if(completedAds > 0 && activeStonesCount === 0) activeStonesCount = 6;
       
-      for (let i = 0; i < 6; i++) {
+      for(let i=0; i<6; i++) {
         let stone = document.getElementById(`stone-${i}`);
-        if (i < activeStonesCount) {
+        if(i < activeStonesCount) {
           stone.classList.add('active');
         } else {
           stone.classList.remove('active');
@@ -649,11 +619,13 @@
       }
       document.getElementById('stones-count').innerText = `${activeStonesCount} / 6`;
 
-      // Progress bar fill
+      // Progress Bar
       let progress = (completedAds % 10) * 10;
       if (completedAds > 0 && progress === 0) progress = 100;
       document.getElementById('progress-bar').style.width = progress + '%';
 
+      localStorage.setItem('user_balance', balance);
+      localStorage.setItem('today_earned', todayEarned);
       localStorage.setItem('completed_ads', completedAds);
     }
 
@@ -666,6 +638,8 @@
     }
 
     function addReward() {
+      balance += REWARD_PER_AD;
+      todayEarned += REWARD_PER_AD;
       completedAds += 1;
       playMarvelSound(completedAds % 2 === 0 ? 'thor' : 'shield');
       showComicPop();
@@ -673,7 +647,6 @@
     }
 
     function toggleAutoAds() {
-      initAudio();
       const btn = document.getElementById('auto-btn');
       const status = document.getElementById('status-text');
 
@@ -682,7 +655,8 @@
         btn.innerText = "ABORT";
         btn.classList.add('running');
         status.innerText = "JARVIS ACTIVE ⚡";
-        status.style.color = "#38bdf8";
+        status.style.color = "#00ff66";
+
         runAutoLoop();
       } else {
         stopAutoAds();
@@ -691,37 +665,31 @@
 
     function stopAutoAds() {
       isRunning = false;
-      if (autoTimer) clearTimeout(autoTimer);
+      clearTimeout(autoTimer);
       const btn = document.getElementById('auto-btn');
       const status = document.getElementById('status-text');
       
       btn.innerText = "JARVIS AUTO";
       btn.classList.remove('running');
       status.innerText = "STANDBY";
-      status.style.color = "#6b7280";
+      status.style.color = "#588063";
     }
 
-    async function runAutoLoop() {
+    function runAutoLoop() {
       if (!isRunning) return;
+
+      addReward();
 
       if (typeof show_11477768 === 'function') {
         try {
-          await show_11477768();
-          addReward();
-        } catch (e) {
-          console.warn("Ad skip/fail:", e);
-        }
-      } else {
-        addReward();
+          show_11477768().catch((e) => console.log("Ad closed", e));
+        } catch(e) {}
       }
 
-      if (isRunning) {
-        autoTimer = setTimeout(runAutoLoop, AUTO_DELAY_MS);
-      }
+      autoTimer = setTimeout(runAutoLoop, AUTO_DELAY_MS);
     }
 
     function openDirectLink() {
-      initAudio();
       playMarvelSound('thor');
       if (DIRECT_LINK_URL) {
         if (tg && tg.openLink) {
